@@ -7,7 +7,7 @@
 支持原项目适用的 **Debian / Ubuntu**，以 root 身份运行：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/jiaxinzi1212/port-traffic-dog-custom/main/install.sh -o /tmp/dog-install.sh && bash /tmp/dog-install.sh
+curl -fsSL https://raw.githubusercontent.com/jiaxinzi1212/port-traffic-dog-custom/main/install-v2.sh -o /tmp/dog-install.sh && bash /tmp/dog-install.sh
 ```
 
 如果尚未以 root 登录，可将末尾改为 `sudo bash /tmp/dog-install.sh`。
