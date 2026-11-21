@@ -12,7 +12,7 @@ curl -fsSL https://raw.githubusercontent.com/jiaxinzi1212/port-traffic-dog-custo
 
 如果尚未以 root 登录，可将末尾改为 `sudo bash /tmp/dog-install.sh`。
 
-安装器将下载原版主脚本、检查版本与函数结构、集成通知美化模板、执行 Bash 语法检查，随后启动配置菜单。**不会自动帮你配置钉钉机器人或监控端口。**
+安装器会自动检查并在 Debian/Ubuntu 缺少 Python 3 时使用 `apt-get` 安装依赖，然后下载原版主脚本、检查版本与函数结构、集成通知美化模板、执行 Bash 语法检查，随后启动配置菜单。**不会自动帮你配置钉钉机器人或监控端口。**
 
 首次安装完成后用 `dog` 打开菜单：添加需要监控的端口，并在通知设置里选择 **钉钉 (dingtalk)**，填写群机器人的 Webhook URL 和服务器名称，启用状态通知。每小时推送频率可以在原菜单内设置。测试：
 
