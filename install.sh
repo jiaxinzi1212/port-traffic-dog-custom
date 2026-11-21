@@ -7,8 +7,31 @@ fail() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 info() { printf '[port-traffic-dog] %s\n' "$*"; }
 
 [ "$(id -u)" -eq 0 ] || fail 'Run with root permissions (sudo bash ...)'
-command -v python3 >/dev/null 2>&1 || fail 'Python 3 is required for the installation step.'
 command -v bash >/dev/null 2>&1 || fail 'Bash is required.'
+
+# Minimal Debian/Ubuntu VPS images may omit Python 3. Install it only when absent.
+# Python is needed by this installer to apply the built-in message-format patch;
+# it is not required for running the final Bash monitoring script.
+if ! command -v python3 >/dev/null 2>&1; then
+    if [ -x /usr/bin/python3 ]; then
+        export PATH="/usr/bin:$PATH"
+    else
+        info 'Python 3 is missing; checking whether apt-get can install it ...'
+        [ -r /etc/os-release ] || fail 'Unable to identify the OS; please install python3 manually.'
+        . /etc/os-release
+        case "${ID:-}" in
+            debian|ubuntu) ;;
+            *) fail "Auto-install is limited to Debian/Ubuntu (detected: ${ID:-unknown}). Install python3 manually." ;;
+        esac
+        command -v apt-get >/dev/null 2>&1 || fail 'apt-get is unavailable; please install python3 manually.'
+        export DEBIAN_FRONTEND=noninteractive
+        info 'Running apt-get update ...'
+        apt-get update -qq || fail 'apt-get update failed; please check DNS/network and apt repositories.'
+        info 'Installing python3 ...'
+        apt-get install -y --no-install-recommends python3 || fail 'Python 3 installation failed; inspect apt output above.'
+    fi
+fi
+command -v python3 >/dev/null 2>&1 || fail 'Python 3 is still unavailable after installation.'
 
 UPSTREAM_URL='https://raw.githubusercontent.com/zywe03/realm-xwPF/main/port-traffic-dog.sh'
 INSTALL_PATH="${PTDOG_INSTALL_PATH:-/usr/local/bin/port-traffic-dog.sh}"
