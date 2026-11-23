@@ -87,7 +87,10 @@ actual_blob_sha1=$(
 )
 [ "$actual_blob_sha1" = "$UPSTREAM_BLOB_SHA1" ] || \
     fail 'Pinned upstream file content does not match audited Git object; no installation performed.'
-grep -q '^readonly SCRIPT_VERSION="1.4.4"grep -q '^format_text_status_message() {' "$original" || \
+grep -Fqx 'readonly SCRIPT_VERSION="1.4.4"' "$original" ||
+    fail 'Pinned upstream is not expected v1.4.4; no installation performed.'
+
+grep -q '^format_text_status_message() {' "$original" || \
     fail 'Missing text status formatter in upstream.'
 grep -q '^format_markdown_status_message() {' "$original" || \
     fail 'Missing markdown status formatter in upstream.'
